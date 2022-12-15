@@ -4,7 +4,6 @@ SHAPE_DATA = {'A': {'Name': 'Rock', 'Score': 1}, 'X': {'Name': 'Rock', 'Score': 
 
 ROUND_OUTCOME_SCORES = {'Win': 6, 'Draw': 3, 'Lose': 0}
 
-
 with open('.\data_files\day_2_input.txt') as input_file:
     game_instructions = input_file.readlines()
 input_file.close()
