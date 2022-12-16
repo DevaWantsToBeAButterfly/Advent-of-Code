@@ -22,7 +22,7 @@ while rucksack_index < len(rucksack_list):
     second_rucksack = set(rucksack_list[rucksack_index + 1])
     third_rucksack = set(rucksack_list[rucksack_index + 2])
     common_item = list(first_rucksack.intersection(second_rucksack.intersection(third_rucksack)))[0]
-    
+
     total_priority += ascii_letters.index(common_item) + 1
 
     rucksack_index += 3
