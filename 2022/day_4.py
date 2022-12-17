@@ -1,6 +1,6 @@
-from generic_functions import read_input
+from generic_functions import read_lines
 
-elf_pairs = read_input('.\data_files\day_4_input.txt')
+elf_pairs = read_lines('.\data_files\day_4_input.txt')
 elf_pairs = [(pair.split(',')[0].split('-'), pair.split(',')[1].split('-')) for pair in elf_pairs]
 useless_elf_counter = 0
 overlap_counter = 0

@@ -1,8 +1,8 @@
 import copy
 
-from generic_functions import read_input
+from generic_functions import read_lines
 
-puzzle_input = read_input('.\data_files\day_5_input.txt')
+puzzle_input = read_lines('.\data_files\day_5_input.txt')
 initial_state_data = [line.replace('\n', '') for line in puzzle_input[:8]]
 moves_list = [line.replace('\n', '').split(' ') for line in puzzle_input[10:]]
 starting_crane_map = [[] for n in range(9)]
