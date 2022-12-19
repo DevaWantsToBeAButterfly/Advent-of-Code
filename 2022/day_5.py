@@ -8,7 +8,7 @@ moves_list = [line.replace('\n', '').split(' ') for line in puzzle_input[10:]]
 starting_crane_map = [[] for n in range(9)]
 
 for crane_row in initial_state_data:
-    # lowest index in the list means highest crane in the column
+    # lowest index is the highest crane in the column
     i = 1
     while i < len(crane_row):
         if crane_row[i] != ' ':
