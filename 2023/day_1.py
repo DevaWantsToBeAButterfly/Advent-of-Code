@@ -1,4 +1,4 @@
-from generic_functions import read_lines
+from aocd import get_data, submit
 
 numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
 words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine']
@@ -6,8 +6,9 @@ numbers_and_words = numbers + words
 words_to_nums = {'zero': '0', 'one': '1', 'two': '2', 'three': '3', 'four': '4', 'five': '5', 'six': '6',
                  'seven': '7', 'eight': '8', 'nine': '9'}
 running_total = 0
+input_data = get_data().splitlines()
 
-for line in read_lines('input_files/day_1.txt'):
+for line in input_data:
     for char in line:
         if char in numbers:
             leftmost_num = char
@@ -20,9 +21,11 @@ for line in read_lines('input_files/day_1.txt'):
     running_total += int(leftmost_num + rightmost_num)
 
 print(running_total)
+submit(running_total, part='a')
+
 running_total = 0
 
-for line in read_lines('input_files/day_1.txt'):
+for line in input_data:
     leftmost_num_index = 99999999
     leftmost_num = None
     rightmost_num_index = -1
@@ -48,3 +51,4 @@ for line in read_lines('input_files/day_1.txt'):
     running_total += int(leftmost_num+rightmost_num)
 
 print(running_total)
+submit(running_total, part='b')
