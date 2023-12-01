@@ -23,21 +23,21 @@ print(running_total)
 running_total = 0
 
 for line in read_lines('input_files/day_1.txt'):
-    min_index = 99999999
+    leftmost_num_index = 99999999
     leftmost_num = None
-    max_index = -1
+    rightmost_num_index = -1
     rightmost_num = None
 
     for num in numbers_and_words:
         if num in line:
-            temp_leftmost_num = line.index(num)
-            if temp_leftmost_num < min_index:
-                min_index = line.index(num)
+            temp_leftmost_num_index = line.index(num)
+            if temp_leftmost_num_index < leftmost_num_index:
+                leftmost_num_index = line.index(num)
                 leftmost_num = num
 
-            temp_rightmost_num = line.rindex(num)
-            if temp_rightmost_num > max_index:
-                max_index = line.rindex(num)
+            temp_rightmost_num_index = line.rindex(num)
+            if temp_rightmost_num_index > rightmost_num_index:
+                rightmost_num_index = line.rindex(num)
                 rightmost_num = num
 
     if leftmost_num in words:
