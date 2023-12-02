@@ -1,0 +1,31 @@
+PATTERN = [0, 1, 0, -1]
+puzzle_input = '59764635797473718052486376718142408346357676818478503599633670059885748195966091103097769012608550645686932996546030476521264521211192035231303791868456877717957482002303790897587593845163033589025995509264282936119874431944634114034231860653524971772670684133884675724918425789232716494769777580613065860450960426147822968107966020797566015799032373298777368974345143861776639554900206816815180398947497976797052359051851907518938864559670396616664893641990595511306542705720282494028966984911349389079744726360038030937356245125498836945495984280140199805250151145858084911362487953389949062108285035318964376799823425466027816115616249496434133896'
+
+for n in range(100):
+    output_string = ''
+    for output_digit_index in range(1, len(puzzle_input) + 1):
+        output_value = 0
+        times_repeated = 1
+        current_key_index = 0
+
+        for input_digit in puzzle_input:
+            if times_repeated >= output_digit_index:
+                current_key_index = (current_key_index + 1) % 4
+                times_repeated = 0
+
+            output_value += int(input_digit) * PATTERN[current_key_index]
+            times_repeated += 1
+
+        output_value = abs(output_value)
+
+        while output_value > 10:
+            output_value = output_value % 10
+
+        if output_value == 10:
+            output_value = 0
+
+        output_string += str(output_value)
+
+    puzzle_input = output_string
+
+print(puzzle_input)
