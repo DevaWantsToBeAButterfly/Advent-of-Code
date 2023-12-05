@@ -35,43 +35,39 @@ for seed in seeds_list:
     for swap_map in maps_data:
         for line in swap_map['data']:
             if line[1] <= new_seed_value < line[1] + line[2]:
-                new_seed_value = line[0] + abs(new_seed_value - line[1])
+                new_seed_value += line[0] - line[1]
                 break
     seed_locations.append(new_seed_value)
 
 print(min(seed_locations))
 submit(min(seed_locations), part='a')
 
-# seed_groups = []
-# split_seed_groups = []
-# n = 0
-#
-# while n < len(seeds_list):
-#     seed_groups.append({'Starting seed': seeds_list[n], 'Range': seeds_list[n + 1]})
-#     n += 2
-#
-# for seed_group in seed_groups:
-#     start_seed = seed_group['Starting seed']
-#     seed_range = seed_group['Range']
-#
-#     for swap_map in maps_data:
-#         print('ooooh', seed_group)
-#         for line in swap_map['data']:
-#             map_destination = line[0]
-#             map_start = line[1]
-#             map_range = line[2]
-#
-#             # Either lower and never able to reach map, or higher and never reached by map
-#             if start_seed + seed_range < map_start:
-#                 break
-#             if start_seed > map_start + map_range:
-#
-#             # Initial seed lower than map start but eventually reaches it given its range
-#             if start_seed < map_start <= start_seed + seed_range:
-#                 split_seed_groups.append({'Starting seed': map_start, 'Range': seed_range - (map_start - start_seed)})
-#
-#                 quit()
-#             if line[1] <= start_seed < line[1] + line[2]:
-#                 new_seed_value = line[0] + abs(new_seed_value - line[1])
-#                 break
-#     seed_locations.append(new_seed_value)
+seed_groups = []
+n = 0
+
+while n < len(seeds_list):
+    seed_groups.append({'Starting seed': seeds_list[n], 'Range': seeds_list[n + 1]})
+    n += 2
+
+n = 0
+
+while True:
+    starting_n = n
+    current_n_value = n
+
+    for swap_map in maps_data[::-1]:
+        for line in swap_map['data']:
+            destination = line[0]
+            start = line[1]
+            line_range = line[2]
+            if destination <= current_n_value < destination + line_range:
+                current_n_value = start + current_n_value - destination
+                break
+
+    for seed in seed_groups:
+        if seed['Starting seed'] <= current_n_value < seed['Starting seed'] + seed['Range']:
+            print(starting_n)
+            submit(starting_n, part='b')
+            quit()
+
+    n += 1
