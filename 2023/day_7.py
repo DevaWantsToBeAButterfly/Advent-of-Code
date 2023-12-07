@@ -32,10 +32,9 @@ def find_hand_type(hand_cards, using_jokers=False):
                     elif hand_cards.count(card) == 2:
                         if hand_cards.count('J') == 2:
                             hand_type = 'Four of a kind'
-                            break
                         else:
                             hand_type = 'Full house'
-                            break
+                        break
             else:
                 for card in hand_cards:
                     if hand_cards.count(card) == 3:
@@ -98,8 +97,7 @@ def quick_sort(hand_list, using_jokers=False):
     if len(higher_hands) > 1:
         higher_hands = quick_sort(higher_hands, using_jokers)
 
-    lower_hands.append(pivot_hand)
-    return lower_hands + higher_hands
+    return lower_hands + [pivot_hand] + higher_hands
 
 
 def reorder_hands_list(hands_list, using_jokers=False):
