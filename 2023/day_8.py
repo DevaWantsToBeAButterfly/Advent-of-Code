@@ -68,7 +68,6 @@ steps_taken = []
 
 for start_node in start_nodes:
     steps_taken.append(find_path_to_node(start_node, 'Z'))
-    print(steps_taken)
 
 part_b_answer = least_common_multiple(steps_taken)
 print(part_b_answer)
