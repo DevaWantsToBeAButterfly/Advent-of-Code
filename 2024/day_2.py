@@ -8,8 +8,8 @@ safe_reports = 0
 
 def check_if_safe(report):
     is_safe = True
-    sorted_report = [num for num in report]
-    rev_sorted_report = [num for num in report]
+    sorted_report = report.copy()
+    rev_sorted_report = report.copy()
 
     sorted_report.sort()
     rev_sorted_report.sort(reverse=True)
@@ -34,7 +34,7 @@ safe_reports = 0
 
 for report in reports:
     for n in range(len(report)):
-        new_report = [num for num in report]
+        new_report = report.copy()
         new_report.pop(n)
         if check_if_safe(new_report):
             safe_reports += 1
