@@ -1,28 +1,52 @@
-from aocd import get_data, submit, puzzle
+from aocd import get_data, submit
 
 class Location:
     def __init__(self, x_coord, y_coord, location_type):
         self.x_coord = x_coord
         self.y_coord = y_coord
         self.location_type = location_type
+        self.original_location_type = location_type
         self.visited = False
+        self.can_be_reached = False
+        self.directions_travelled = set()
+
+    def reset_location(self):
+        self.location_type = self.original_location_type
+        self.visited = False
+        self.directions_travelled = set()
 
 class Guard:
     def __init__(self, x_coord, y_coord):
         self.x_coord = x_coord
         self.y_coord = y_coord
+        self.original_x_coord = x_coord
+        self.original_y_coord = y_coord
         self.direction = 'up'
         self.visited_locations = 0
+        self.loops_found = 0
         self.left = False
+        self.is_looping = False
 
     def visit(self):
         current_location = puzzle_map[self.y_coord][self.x_coord]
+
         if not current_location.visited:
-            puzzle_map[self.y_coord][self.x_coord].visited = True
+            current_location.visited = True
+            current_location.can_be_reached = True
+            current_location.directions_travelled.add(self.direction)
+
             self.visited_locations += 1
+
             if (self.x_coord == 0 or self.x_coord == len(puzzle_map[0]) - 1 or
                     self.y_coord == 0 or self.y_coord == len(puzzle_map)- 1):
                 self.leave()
+        else:
+            if self.direction in current_location.directions_travelled:
+                self.loops_found += 1
+                self.is_looping = True
+
+        if not self.left and not self.is_looping:
+            self.move_or_turn()
 
     def move_or_turn(self):
         next_location_x_coord = self.x_coord + directions_offsets[self.direction][0]
@@ -44,25 +68,56 @@ class Guard:
         elif self.direction == 'left':
             self.direction = 'up'
 
+    def respawn(self):
+        self.x_coord = self.original_x_coord
+        self.y_coord = self.original_y_coord
+        self.direction = 'up'
+        self.visited_locations = 0
+        self.left = False
+        self.is_looping = False
+
     def leave(self):
-        self.leave = True
-        submit(self.visited_locations, 'a')
+        self.left = True
 
 directions_offsets = {'up':[0, -1], 'down':[0, 1], 'left':[-1, 0], 'right':[1, 0]}
 
 puzzle_data = [list(row) for row in get_data(day=6, year=2024).splitlines()]
-puzzle_map = []
 
-for row_index, row in enumerate(puzzle_data):
-    puzzle_map.append([])
-    for node_index, node in enumerate(row):
-        if node == '^':
-            puzzle_map[row_index].append(Location(node_index, row_index, '.'))
-            guard = Guard(node_index, row_index)
-        else:
-            puzzle_map[row_index].append(Location(node_index, row_index, node))
+def build_map():
+    new_map = []
+    for row_index, row in enumerate(puzzle_data):
+        new_map.append([])
+        for node_index, node in enumerate(row):
+            if node == '^':
+                new_map[row_index].append(Location(node_index, row_index, '.'))
+                guard = Guard(node_index, row_index)
+            else:
+                new_map[row_index].append(Location(node_index, row_index, node))
+
+    return new_map, guard
+
+def reset_stuff():
+    guard.respawn()
+
+    for row in puzzle_map:
+        for location in row:
+            location.reset_location()
+
+puzzle_map, guard = build_map()
 
 while not guard.left:
     guard.visit()
-    guard.move_or_turn()
 
+submit(guard.visited_locations, 'a')
+
+for blocker_y_coord in range(len(puzzle_map)):
+    for blocker_x_coord in range(len(puzzle_map[0])):
+        reset_stuff()
+        current_blocker = puzzle_map[blocker_y_coord][blocker_x_coord]
+
+        if (blocker_x_coord != guard.x_coord or blocker_y_coord != guard.y_coord) and current_blocker.location_type != '#' and current_blocker.can_be_reached:
+            puzzle_map[blocker_y_coord][blocker_x_coord].location_type = '#'
+            while not guard.left and not guard.is_looping:
+                guard.visit()
+
+submit(guard.loops_found, 'b')
