@@ -13,7 +13,7 @@ class Location:
     def reset_location(self):
         self.location_type = self.original_location_type
         self.visited = False
-        self.directions_travelled = set()
+        self.directions_travelled.clear()
 
 class Guard:
     def __init__(self, x_coord, y_coord):
@@ -39,7 +39,7 @@ class Guard:
 
             if (self.x_coord == 0 or self.x_coord == len(puzzle_map[0]) - 1 or
                     self.y_coord == 0 or self.y_coord == len(puzzle_map)- 1):
-                self.leave()
+                self.left = True
         else:
             if self.direction in current_location.directions_travelled:
                 self.loops_found += 1
@@ -75,9 +75,6 @@ class Guard:
         self.visited_locations = 0
         self.left = False
         self.is_looping = False
-
-    def leave(self):
-        self.left = True
 
 directions_offsets = {'up':[0, -1], 'down':[0, 1], 'left':[-1, 0], 'right':[1, 0]}
 
