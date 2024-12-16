@@ -8,12 +8,10 @@ class Location:
         self.original_location_type = location_type
         self.visited = False
         self.can_be_reached = False
-        self.directions_travelled = set()
 
     def reset_location(self):
         self.location_type = self.original_location_type
         self.visited = False
-        self.directions_travelled.clear()
 
 class Guard:
     def __init__(self, x_coord, y_coord):
@@ -26,6 +24,7 @@ class Guard:
         self.loops_found = 0
         self.left = False
         self.is_looping = False
+        self.turn_spots = set()
 
     def visit(self):
         current_location = puzzle_map[self.y_coord][self.x_coord]
@@ -33,17 +32,13 @@ class Guard:
         if not current_location.visited:
             current_location.visited = True
             current_location.can_be_reached = True
-            current_location.directions_travelled.add(self.direction)
 
             self.visited_locations += 1
 
             if (self.x_coord == 0 or self.x_coord == len(puzzle_map[0]) - 1 or
                     self.y_coord == 0 or self.y_coord == len(puzzle_map)- 1):
                 self.left = True
-        else:
-            if self.direction in current_location.directions_travelled:
-                self.loops_found += 1
-                self.is_looping = True
+
 
         if not self.left and not self.is_looping:
             self.move_or_turn()
@@ -54,6 +49,12 @@ class Guard:
 
         if puzzle_map[next_location_y_coord][next_location_x_coord].location_type == '#':
             self.turn()
+
+            if (self.x_coord, self.y_coord, self.direction) in self.turn_spots:
+                self.is_looping = True
+                self.loops_found += 1
+            else:
+                self.turn_spots.add((self.x_coord, self.y_coord, self.direction))
         else:
             self.x_coord = next_location_x_coord
             self.y_coord = next_location_y_coord
@@ -75,6 +76,7 @@ class Guard:
         self.visited_locations = 0
         self.left = False
         self.is_looping = False
+        self.turn_spots.clear()
 
 directions_offsets = {'up':[0, -1], 'down':[0, 1], 'left':[-1, 0], 'right':[1, 0]}
 
