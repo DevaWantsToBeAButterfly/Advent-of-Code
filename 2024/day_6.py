@@ -44,8 +44,8 @@ class Guard:
             self.move_or_turn()
 
     def move_or_turn(self):
-        next_location_x_coord = self.x_coord + directions_offsets[self.direction][0]
-        next_location_y_coord = self.y_coord + directions_offsets[self.direction][1]
+        next_location_x_coord = self.x_coord + DIRECTIONS_OFFSETS[self.direction][0]
+        next_location_y_coord = self.y_coord + DIRECTIONS_OFFSETS[self.direction][1]
 
         if puzzle_map[next_location_y_coord][next_location_x_coord].location_type == '#':
             self.turn()
@@ -78,7 +78,7 @@ class Guard:
         self.is_looping = False
         self.turn_spots.clear()
 
-directions_offsets = {'up':[0, -1], 'down':[0, 1], 'left':[-1, 0], 'right':[1, 0]}
+DIRECTIONS_OFFSETS = {'up':[0, -1], 'down':[0, 1], 'left':[-1, 0], 'right':[1, 0]}
 
 puzzle_data = [list(row) for row in get_data(day=6, year=2024).splitlines()]
 
