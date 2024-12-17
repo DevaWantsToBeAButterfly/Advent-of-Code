@@ -22,18 +22,19 @@ class Guard:
         self.direction = 'up'
         self.visited_locations = 0
         self.loops_found = 0
+        self.turn_spots = set()
+        self.first_trip = True
         self.left = False
         self.is_looping = False
-        self.turn_spots = set()
 
     def visit(self):
         current_location = puzzle_map[self.y_coord][self.x_coord]
 
         if not current_location.visited:
-            current_location.visited = True
-            current_location.can_be_reached = True
-
-            self.visited_locations += 1
+            if self.first_trip:
+                current_location.visited = True
+                current_location.can_be_reached = True
+                self.visited_locations += 1
 
             if (self.x_coord == 0 or self.x_coord == len(puzzle_map[0]) - 1 or
                     self.y_coord == 0 or self.y_coord == len(puzzle_map)- 1):
@@ -102,21 +103,27 @@ def reset_stuff():
         for location in row:
             location.reset_location()
 
+def spawn_blocker(x_coord, y_coord):
+    current_blocker = puzzle_map[y_coord][x_coord]
+    if ((x_coord != guard.x_coord or y_coord != guard.y_coord) and
+            current_blocker.location_type != '#' and
+            current_blocker.can_be_reached):
+        puzzle_map[y_coord][x_coord].location_type = '#'
+        while not guard.left and not guard.is_looping:
+            guard.visit()
+
+
 puzzle_map, guard = build_map()
 
 while not guard.left:
     guard.visit()
 
 submit(guard.visited_locations, 'a')
+guard.first_trip = False
 
 for blocker_y_coord in range(len(puzzle_map)):
     for blocker_x_coord in range(len(puzzle_map[0])):
         reset_stuff()
-        current_blocker = puzzle_map[blocker_y_coord][blocker_x_coord]
-
-        if (blocker_x_coord != guard.x_coord or blocker_y_coord != guard.y_coord) and current_blocker.location_type != '#' and current_blocker.can_be_reached:
-            puzzle_map[blocker_y_coord][blocker_x_coord].location_type = '#'
-            while not guard.left and not guard.is_looping:
-                guard.visit()
+        spawn_blocker(blocker_x_coord, blocker_y_coord)
 
 submit(guard.loops_found, 'b')
