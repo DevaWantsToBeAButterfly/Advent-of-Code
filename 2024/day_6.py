@@ -96,7 +96,7 @@ def build_map():
 
     return new_map, guard
 
-def reset_stuff():
+def reset_map():
     guard.respawn()
 
     for row in puzzle_map:
@@ -123,7 +123,7 @@ guard.first_trip = False
 
 for blocker_y_coord in range(len(puzzle_map)):
     for blocker_x_coord in range(len(puzzle_map[0])):
-        reset_stuff()
+        reset_map()
         spawn_blocker(blocker_x_coord, blocker_y_coord)
 
 submit(guard.loops_found, 'b')
