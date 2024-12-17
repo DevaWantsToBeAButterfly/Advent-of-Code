@@ -5,20 +5,20 @@ class Location:
         self.x_coord = x_coord
         self.y_coord = y_coord
         self.location_type = location_type
-        self.original_location_type = location_type
+        self.ORIGINAL_LOCATION_TYPE = location_type
         self.visited = False
         self.can_be_reached = False
 
     def reset_location(self):
-        self.location_type = self.original_location_type
+        self.location_type = self.ORIGINAL_LOCATION_TYPE
         self.visited = False
 
 class Guard:
     def __init__(self, x_coord, y_coord):
         self.x_coord = x_coord
         self.y_coord = y_coord
-        self.original_x_coord = x_coord
-        self.original_y_coord = y_coord
+        self.ORIGINAL_X_COORD = x_coord
+        self.ORIGINAL_Y_COORD = y_coord
         self.direction = 'up'
         self.visited_locations = 0
         self.loops_found = 0
@@ -70,8 +70,8 @@ class Guard:
             self.direction = 'up'
 
     def respawn(self):
-        self.x_coord = self.original_x_coord
-        self.y_coord = self.original_y_coord
+        self.x_coord = self.ORIGINAL_X_COORD
+        self.y_coord = self.ORIGINAL_Y_COORD
         self.direction = 'up'
         self.visited_locations = 0
         self.left = False
