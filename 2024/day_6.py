@@ -40,7 +40,6 @@ class Guard:
                     self.y_coord == 0 or self.y_coord == len(puzzle_map)- 1):
                 self.left = True
 
-
         if not self.left and not self.is_looping:
             self.move_or_turn()
 
